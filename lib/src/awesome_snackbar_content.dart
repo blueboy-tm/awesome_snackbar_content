@@ -37,16 +37,20 @@ class AwesomeSnackbarContent extends StatelessWidget {
   /// if you want to customize the font size of the message
   final double? messageFontSize;
 
+  // Custom action for close icon
+  final void Function()? onTapClose;
+
   const AwesomeSnackbarContent({
-    Key? key,
+    super.key,
     this.color,
     this.titleFontSize,
     this.messageFontSize,
     required this.title,
     required this.message,
     required this.contentType,
+    this.onTapClose,
     this.inMaterialBanner = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -179,14 +183,15 @@ class AwesomeSnackbarContent extends StatelessWidget {
                     ),
 
                     InkWell(
-                      onTap: () {
-                        if (inMaterialBanner) {
-                          ScaffoldMessenger.of(context)
-                              .hideCurrentMaterialBanner();
-                          return;
-                        }
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      },
+                      onTap: onTapClose ??
+                          () {
+                            if (inMaterialBanner) {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentMaterialBanner();
+                              return;
+                            }
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          },
                       child: SvgPicture.asset(
                         AssetsPath.failure,
                         height: size.height * 0.022,
